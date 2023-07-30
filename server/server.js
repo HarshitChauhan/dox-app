@@ -1,11 +1,12 @@
 require("dotenv").config();
 const express = require("express");
+const { createServer } = require("http");
 const router = require("./router");
 const cors = require("cors");
 const { Server } = require("socket.io");
 const mongoose = require("mongoose");
 const Document = require("./Document");
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 9000;
 const connectionString = process.env.DATABASE_URL;
 
 function allowCrossDomain(req, res, next) {
@@ -22,20 +23,26 @@ function allowCrossDomain(req, res, next) {
 }
 
 const app = express();
+
+// to run client app on server
+app.use(express.static("client/build"));
+
 console.log("Starting Application Server...");
-const server = app.listen(PORT, () => {
+const httpServer = createServer(app);
+httpServer.listen(PORT, () => {
   console.log(
     `Dox Server has been started successfully on Port: ${process.env.PORT}!`
   );
 });
 
+// const server = app.listen(PORT, () => {
+//   console.log(
+//     `Dox Server has been started successfully on Port: ${process.env.PORT}!`
+//   );
+// });
+
 // Socket setup
-const io = new Server(server, {
-  cors: {
-    origin: process.env.FRONTEND_URL,
-    methods: ["GET", "POST"],
-  },
-});
+const io = new Server(httpServer);
 
 app.use(allowCrossDomain);
 app.use(router);
@@ -58,33 +65,32 @@ mongoose
 const defaultValue = "";
 
 io.on("connection", (socket) => {
-  
   //get-document event if data is present in document
   socket.on("get-document", async (documentId) => {
     const document = await findOrCreateDocument(documentId);
     console.log({
-      status: 'Success ✨',
+      status: "Success ✨",
       timeStamp: new Date().toISOString(),
       message: "New Connection Established",
       data: document,
-      docId: documentId
+      docId: documentId,
     });
 
-    if(typeof(document.data.data) !== "object") {
+    if (typeof document.data.data !== "object") {
       console.log({
-        status: 'Success ✨',
+        status: "Success ✨",
         timeStamp: new Date().toISOString(),
         message: `New Document Created with docId ${documentId}`,
         data: document,
-        docId: documentId
+        docId: documentId,
       });
     } else {
       console.log({
-        status: 'Success ✨',
+        status: "Success ✨",
         timeStamp: new Date().toISOString(),
         message: `New Member joined the existing document with docId ${documentId}`,
         data: document,
-        docId: documentId
+        docId: documentId,
       });
     }
 

@@ -32,7 +32,7 @@ function TextEditor() {
   useEffect(() => {
     // const s = io("https://dox-server.herokuapp.com");
     // const s = io("http://localhost:3001",{transports: ['websocket'],upgrade:false});
-    const s = io(process.env.REACT_APP_BACKEND_URL, {transports: ['websocket'],upgrade:false});
+    const s = io("");
     setSocket(s);
     return () => {
       s.disconnect();
@@ -103,17 +103,15 @@ function TextEditor() {
     const handleReconnect = () => {
       console.log("Socket connection has been Reconnected! 🎊");
     };
-    socket.on("disconnect", handleDisconnect); 
-    socket.on("connect", handleConnect); 
-    socket.on("reconnect", handleReconnect); 
+    socket.on("disconnect", handleDisconnect);
+    socket.on("connect", handleConnect);
+    socket.on("reconnect", handleReconnect);
     return () => {
       socket.off("disconnect", handleDisconnect);
       socket.off("connect", handleConnect);
       socket.off("reconnect", handleReconnect);
     };
   }, [socket]);
-
-  
 
   const wrapperRef = useCallback((wrapper) => {
     if (wrapper == null) return;
@@ -122,10 +120,9 @@ function TextEditor() {
     wrapper.append(editor);
     const q = new Quill(editor, {
       theme: "snow",
-      placeholder: 'Start Writing...',
+      placeholder: "Start Writing...",
       modules: { toolbar: toolbarOptions },
     });
-
 
     //if document is loading...
     q.disable();
