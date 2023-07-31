@@ -6,6 +6,8 @@ import {
   Redirect,
 } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+import NotFound from "./NotFound";
+
 function App() {
   return (
     <Router>
@@ -15,6 +17,12 @@ function App() {
         </Route>
         <Route path="/documents/:id" exact>
           <TextEditor />
+        </Route>
+        <Route path="/404" exact>
+          <NotFound />
+        </Route>
+        <Route>
+          <Redirect to={"/404"} />
         </Route>
       </Switch>
     </Router>
