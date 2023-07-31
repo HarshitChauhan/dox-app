@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const Document = require("./Document");
 const PORT = process.env.PORT || 9000;
 const connectionString = process.env.DATABASE_URL;
+const path = require("path");
 
 function allowCrossDomain(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -25,7 +26,7 @@ function allowCrossDomain(req, res, next) {
 const app = express();
 
 // to run client app on server
-app.use(express.static("client/build"));
+app.use(express.static(path.join(__dirname, "client/build")));
 
 console.log("Starting Application Server...");
 const httpServer = createServer(app);
@@ -76,23 +77,23 @@ io.on("connection", (socket) => {
       docId: documentId,
     });
 
-    if (typeof document.data.data !== "object") {
-      console.log({
-        status: "Success ✨",
-        timeStamp: new Date().toISOString(),
-        message: `New Document Created with docId ${documentId}`,
-        data: document,
-        docId: documentId,
-      });
-    } else {
-      console.log({
-        status: "Success ✨",
-        timeStamp: new Date().toISOString(),
-        message: `New Member joined the existing document with docId ${documentId}`,
-        data: document,
-        docId: documentId,
-      });
-    }
+    // if (typeof document.data.data !== "object") {
+    //   console.log({
+    //     status: "Success ✨",
+    //     timeStamp: new Date().toISOString(),
+    //     message: `New Document Created with docId ${documentId}`,
+    //     data: document,
+    //     docId: documentId,
+    //   });
+    // } else {
+    //   console.log({
+    //     status: "Success ✨",
+    //     timeStamp: new Date().toISOString(),
+    //     message: `New Member joined the existing document with docId ${documentId}`,
+    //     data: document,
+    //     docId: documentId,
+    //   });
+    // }
 
     // it joins a seperate room for every document
     socket.join(documentId);
