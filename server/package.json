@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "npm run serverPostBuild && node server.js",
-    "devStart": "nodemon server.js",
+    "devStart": "npm run clientBuild && nodemon server.js",
     "clientInstall": "cd client && npm install",
     "clientBuild": "cd client && npm run build",
     "serverPostBuild": "npm run clientInstall && npm run clientBuild",
