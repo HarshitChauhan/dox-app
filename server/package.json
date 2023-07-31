@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "dox-server",
   "main": "server.js",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "start": "npm run serverPostBuild && node server.js",
     "devStart": "npm run clientBuild && nodemon server.js",

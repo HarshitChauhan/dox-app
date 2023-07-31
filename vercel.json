@@ -1,6 +1,6 @@
 {
-  "version": "1.0.0",
+  "version": 2,
   "name": "dox-app",
-  "builds": [{ "src": "server.js", "use": "@vercel/node" }],
-  "routes": [{ "src": "/(.*)", "dest": "server.js" }]
+  "builds": [{ "src": "./server.js", "use": "@vercel/node" }],
+  "routes": [{ "src": "/(.*)", "dest": "/" }]
 }
